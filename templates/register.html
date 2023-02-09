@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title%} Register-FindPG {% endblock %}
+
+
+{% block css %}
+<style>
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+        font-size: 1rem;
+        line-height: 2.15;
+        padding-left: .75em;
+        padding-right: .75em;
+    }
+
+    .card-registration .select-arrow {
+        top: 13px;
+    }
+
+    #bg {
+        background-color: aliceblue !important;
+        background: url('/media/pexels-jean-van-der-meulen-1457842.jpg') no-repeat center center/cover;
+    }
+</style>
+{% endblock css %}
+
+
+
+
+{% block body %}
+
+<section class="h-100 bg-dark" id="bg">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+                <div class="card card-registration my-4">
+                    <div class="row g-0">
+                        <div class="col-xl-6 d-none d-xl-block">
+                            <img src="/media/pexels-andreea-ch-1040893.jpg" alt="Sample photo" class="img-fluid"
+                                style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+                        </div>
+                        <div class="col-xl-6">
+                            <form action="/register/" method="post" enctype='multipart/form-data'>{% csrf_token %}
+                                <div class="card-body p-md-5 text-black">
+                                    <h3 class="mb-5 text-uppercase">PG renter registration form</h3>
+
+                                    <div class="form-outline mb-2">
+                                        <input type="text" id="name" name="name" class="form-control form-control-lg" />
+                                        <label class="form-label" for="name">Name</label>
+                                    </div>
+                                    <div class="form-outline mb-2">
+                                        <input type="text" id="phone" name="phone" class="form-control form-control-lg" />
+                                        <label class="form-label" for="phone">Phone Number</label>
+                                    </div>
+                                    <div class="form-outline mb-2">
+                                        <input type="text" id="email" name="email" class="form-control form-control-lg" />
+                                        <label class="form-label" for="email">Email</label>
+                                    </div>
+                                    <div class="form-outline mb-2">
+                                        <input type="text" id="city" name="city" list="selectcity" class="form-control form-control-lg" />
+                                        <label class="form-label" for="city">Select City</label>
+                                        <datalist id="selectcity">
+                                            <option value="PHAGWARA">PHAGWARA</option>
+                                            <option value="JALANDHAR">JALANDHAR</option>
+                                            
+            
+                                        </datalist>
+                                    </div>
+
+                                    <div class="form-outline mb-2">
+                                        <input type="text" id="m_address" name="m_address" class="form-control form-control-lg" />
+                                        <label class="form-label" for="m_address" >Property Main Address</label>
+                                    </div>
+                                    <div class="form-outline mb-2">
+                                        <input type="text" id="d_address" name="d_address" class="form-control form-control-lg" />
+                                        <label class="form-label" for="d_address">Property Detailed Address</label>
+                                    </div>
+                                    <div class="form-outline mb-2">
+                                        <input type="number" id="roomvacent" name="vacent" class="form-control form-control-lg"
+                                            min="1" value="1" />
+                                        <label class="form-label" for="roomvacent">Room Vacent</label>
+                                    </div>
+
+                                    <div class="form-outline mb-2">
+                                        <!-- <input type="text" id="form3Example8" class="form-control form-control-lg" /> -->
+                                        <textarea  class="form-control" id="r_details" name="r_details" cols="30"
+                                            rows="10"></textarea>
+                                        <label class="form-label" for="r_details">Room Details</label>
+                                    </div>
+                                    <div class="form-outline mb-2">
+                                        <input multiple type="file" id="r_img" name="r_img" class="form-control form-control-lg"
+                                             />
+                                        <label class="form-label" for="r_img">Room Photos</label>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end pt-3">
+                                        <button type="reset" class="btn btn-light btn-lg">Reset all</button>
+                                        <button type="submit" class="btn btn-warning btn-lg ms-2">Submit form</button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock body %}
