@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block title%} FindPG {% endblock %}
+{% block css %}
+<style>
+    @media screen and (max-width: 750px) {
+        #box {
+            height: 550px;
+            opacity: 1;
+        }
+
+
+    }
+
+    .container a {
+        text-decoration: none;
+        color: black !important;
+    }
+
+    #box:hover {
+
+        transform: scale(1.02) !important;
+        transition-delay: .4s;
+        transition-timing-function: ease-in;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+</style>
+{% endblock css %}
+
+
+{% load extras %}
+
+{% block body %}
+
+
+<div class="container mt-3">
+    <h2 class="text-center my-4">PG in {{scity}} ({{tresults}} results)</h2>
+    {% for item in obj %}
+
+
+    <a href="/{{scity}}/{{item.sno}}/{{item.main_address}}">
+        <div class=" my-5" id="box">
+            <div class="card mb-3" style="height: 250px;">
+                <div class="row g-0">
+
+                    <div id="carouselExampleAutoplaying" class="carousel slide col-md-3" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                {% for item1 in item.sno|get_img %}
+
+
+                                <img src="/media/{{item1.room_photos}}" class="d-block w-100" style="height: 250px;"
+                                    alt="...">
+
+                                {% if forloop.counter|divisibleby:1 and forloop.counter > 0 and not forloop.last%}
+
+                            </div>
+                            <div class="carousel-item">
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+
+
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+
+
+                    <div class="col-md-9">
+                        <div class="card-body" style="background-color: aliceblue; opacity: .8;">
+                            <h4 class="card-title">{{item.main_address}}</h4>
+                            <h5><span class="badge text-bg-info">Available {{item.room_vacent}}</span></h5>
+
+                            <p class="card-text">This is a wider card with supporting text below as a natural
+                                lead-in to
+                                additional content. This content is a little</p>
+                            <p class="card-text" style="font-size: x-large;"><b> &#x20B9; 1600</b></p>
+                            <span>
+                                <button class="btn btn-primary">
+                                    Book Now
+                                </button>
+                                <button class="btn btn-primary">
+                                    Visit Now
+                                </button>
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+
+
+
+
+</div>
+<footer class="text-center text-white">
+
+    <div class="text-center text-dark mt-3">
+
+
+
+        © 2023 Copyright:
+        <a class="text-dark" href="https://FlyHigh.com/" style="color:red !important">FindYourPG.com</a>
+
+        <!-- Instagram -->
+        <a class="btn btn-link btn-floating btn-lg text-dark" href="https://www.instagram.com/i_agarwal_ansh/"
+            role="button" data-mdb-ripple-color="dark"><i class="fab fa-instagram"></i></a>
+
+        <!-- Linkedin -->
+        <a class="btn btn-link btn-floating btn-lg text-dark" href="https://www.linkedin.com/in/ansh-agarwal-390797253/"
+            role="button" data-mdb-ripple-color="dark" style="margin: -15px !important;"><i
+                class="fab fa-linkedin"></i></a>
+        <!-- Github -->
+        <a class="btn btn-link btn-floating btn-lg text-dark" href="https://github.com/the-error4-0-4" role="button"
+            data-mdb-ripple-color="dark"><i class="fab fa-github"></i></a>
+
+    </div>
+    <!-- Copyright -->
+</footer>
+
+
+{% endblock body %}
+
+
+
+{% block js %}
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+{% endblock js %}

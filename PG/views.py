@@ -54,6 +54,18 @@ def register(request):
     else:
         return render(request,'register.html')
 
+def home1(request,slug):
+        obj=RentarDetail.objects.filter(City=slug)
+        # print(obj)
+        return render(request,'home1.html',{'obj':obj,'scity':slug,'tresults':len(obj)})
+
+def view(request,slug,myid,slug2):
+    print(myid)
+    obj=RentarDetail.objects.filter(sno=myid)
+    detail=(obj[0].room_details)
+    list=(detail.split(','))
+    return render(request,'view.html',{'item':obj[0],'slug':slug2,'list':list})
+    
 
 
 
