@@ -36,7 +36,7 @@
     <h2 class="text-center my-4">PG in {{scity}} ({{tresults}} results)</h2>
     {% for item in obj %}
 
-
+    {% if item.status%}
     <a href="/{{scity}}/{{item.sno}}/{{item.main_address}}">
         <div class=" my-5" id="box">
             <div class="card mb-3" style="height: 250px;">
@@ -75,23 +75,21 @@
                     </div>
 
 
-                    <div class="col-md-9">
-                        <div class="card-body" style="background-color: aliceblue; opacity: .8;">
+                    <div class="col-md-9"  style="background-color: aliceblue; opacity: .8;">
+                        <div class="card-body">
                             <h4 class="card-title">{{item.main_address}}</h4>
                             <h5><span class="badge text-bg-info">Available {{item.room_vacent}}</span></h5>
 
                             <p class="card-text">This is a wider card with supporting text below as a natural
                                 lead-in to
                                 additional content. This content is a little</p>
-                            <p class="card-text" style="font-size: x-large;"><b> &#x20B9; 1600</b></p>
-                            <span>
-                                <button class="btn btn-primary">
-                                    Book Now
-                                </button>
+                            <p class="card-text" style="font-size: x-large;"><b> &#x20B9; {{item.price}}</b></p>
+                            <!-- <span>
+                                <button class="btn btn-primary"> Book Now</button>
                                 <button class="btn btn-primary">
                                     Visit Now
                                 </button>
-                            </span>
+                            </span> -->
 
                         </div>
                     </div>
@@ -99,6 +97,7 @@
             </div>
         </div>
     </a>
+    {% endif %}
     {% endfor %}
 
 
@@ -137,6 +136,7 @@
 
 {% block js %}
 <script>
+
     if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.href);
     }

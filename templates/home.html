@@ -36,7 +36,7 @@
         background-color: white;
     }
 
-    
+
 
     input:invalid {
         border: 1px solid red;
@@ -90,7 +90,8 @@
                             </div>
 
                             <div class="text-center">
-                                <button id="btn" type="submit" onclick="change()" class="btn btn-danger">Book Now</button>
+                                <button id="btn" type="submit" onclick="change()" class="btn btn-danger">Book
+                                    Now</button>
                             </div>
 
 
@@ -132,11 +133,23 @@
 {% endblock body %}
 {% block js %}
 <script>
-    function change() {
-        x=document.getElementById('city').value
-        document.getElementById("myform").action = "/"+x+"/";
+    // const successCallback = (position) => {
+    //     console.log(position);
+    // };
 
-        
+    // const errorCallback = (error) => {
+    //     console.log(error);
+    // };
+
+    // navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+    // console.log(`Latitude : ${crd.latitude}`);
+
+
+    function change() {
+        x = document.getElementById('city').value
+        document.getElementById("myform").action = "/" + x + "/";
+
+
     }
     var x = 1
     setInterval(() => {

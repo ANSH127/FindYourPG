@@ -4,7 +4,7 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-from PG.models import Userdetail,Contact,multipleimage,RentarDetail
+from PG.models import Userdetail,Contact,multipleimage,RentarDetail,Booking,Schedule
 # Create your views here.
 
 def home(request):
@@ -39,10 +39,11 @@ def register(request):
         main_address=request.POST.get('m_address','')
         detail_address=request.POST.get('d_address','')
         vacency=request.POST.get('vacent','')
+        price=request.POST.get('price','')
         room_details=request.POST.get('r_details','')
         room_photos=request.FILES.getlist('r_img')
         
-        renter_form=RentarDetail(name=name,phone=phone,email=email,City=city,main_address=main_address,detailed_address=detail_address,room_details=room_details,room_vacent=vacency)
+        renter_form=RentarDetail(name=name,phone=phone,email=email,City=city,main_address=main_address,detailed_address=detail_address,room_details=room_details,room_vacent=vacency,price=price)
         renter_form.save()
         for image in room_photos:
             x=multipleimage(room_photos=image,room=RentarDetail.objects.filter(sno=renter_form.sno)[0])
@@ -66,8 +67,42 @@ def view(request,slug,myid,slug2):
     list=(detail.split(','))
     return render(request,'view.html',{'item':obj[0],'slug':slug2,'list':list})
     
+def checkout(request,slug,myid,slug2):
+    
+    obj=RentarDetail.objects.filter(sno=myid)[0]
+    
+    # print(obj)
+
+    return render(request,'booking.html',{'item':obj})
 
 
+
+def schedule(request,slug,myid,slug2):
+    if request.method=='POST':
+        name=request.POST.get('name','')
+        email=request.POST.get('email','')
+        phone=request.POST.get('phone','')
+        age=request.POST.get('age','')
+        gender=request.POST.get('radiobtn','')
+        visitor=request.POST.get('visitor','')
+        date=request.POST.get('date','')
+        time=request.POST.get('time','')
+        schedule=Schedule(name=name,email=email,phone=phone,age=age,gender=gender,visitor=visitor,date=date,time=time,info=RentarDetail.objects.filter(sno=myid)[0])
+        schedule.save()
+        messages.success(request,"Your Visit Scheduled successfully")
+
+        return redirect('/')
+    
+    
+        
+    
+        
+    obj=RentarDetail.objects.filter(sno=myid)[0]
+    
+    # print(obj)
+
+    return render(request,'schedule.html',{'item':obj})
+    
 
 def handlesignup(request):
     if request.method=='POST':
@@ -149,3 +184,23 @@ def handlelogout(request):
     messages.success(request,'Successfully Logout')
     return redirect('/')
 
+
+
+def handlepayment(request,slug,myid,slug2):
+    if request.method=="POST":
+        fname=request.POST.get('fname','')
+        lname=request.POST.get('lname','')
+        email=request.POST.get('email','')
+        phone=request.POST.get('phone','')
+        age=request.POST.get('age','')
+        gender=request.POST.get('radiobtn','')
+        residance=request.POST.get('choice','')
+        print(fname,lname,email,phone,age,gender,residance)
+        booking=Booking(name=fname+lname,email=email,phone=phone,age=age,gender=gender,residance=residance,info=RentarDetail.objects.filter(sno=myid)[0])
+        booking.save()
+
+
+        return HttpResponse('payment gateway')
+    else:
+        return redirect('/')
+    

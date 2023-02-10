@@ -36,8 +36,36 @@ class RentarDetail(models.Model):
     detailed_address=models.CharField(max_length=500)
     room_details=models.TextField()
     room_vacent=models.IntegerField()
+    price=models.IntegerField(default=0)
+    status=models.BooleanField(default=False)
 
 class multipleimage(models.Model):
     sno=models.AutoField(primary_key=True)
     room=models.ForeignKey(RentarDetail,on_delete=models.CASCADE)
     room_photos=models.ImageField(upload_to='room/photo',default='')
+
+
+class Booking(models.Model):
+    sno=models.AutoField(primary_key=True)
+    name=models.CharField(max_length=50)
+    email=models.CharField(max_length=50)
+    phone=models.CharField(max_length=13)
+    age=models.IntegerField()
+    gender=models.CharField(max_length=10)
+    residance=models.CharField(max_length=100)
+    info=models.ForeignKey(RentarDetail,on_delete=models.CASCADE,default='')
+
+
+class Schedule(models.Model):
+    sno=models.AutoField(primary_key=True)
+    name=models.CharField(max_length=50)
+    email=models.CharField(max_length=50)
+    phone=models.CharField(max_length=13)
+    age=models.IntegerField()
+    gender=models.CharField(max_length=10)
+    visitor=models.IntegerField()
+    date=models.DateField(auto_now_add=False)
+    time=models.TimeField(auto_now_add=False)
+    info=models.ForeignKey(RentarDetail,on_delete=models.CASCADE,default='')
+
+    

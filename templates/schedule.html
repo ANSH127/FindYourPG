@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checkout-FindYourPG</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+
+<style>
+    body {
+        background: url('/media/pexels-jean-van-der-meulen-1457842.jpg') no-repeat center center/cover;
+
+
+    }
+</style>
+
+<body>
+
+
+    <div class="container">
+        <div class="card my-4">
+            <div class="card-header">
+                Preview
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{item.main_address}}</h5>
+                <p class="card-text">{{item.room_details}}</p>
+            </div>
+        </div>
+        <section class="gradient-custom my-3">
+            <div class="container py-5 h-100">
+                <div class="row justify-content-center align-items-center h-100">
+                    <div class="">
+                        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+                            <div class="card-body p-4 p-md-5">
+                                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Guest Details</h3>
+                                <form method="post" action="/{{item.City}}/{{item.sno}}/{{item.main_address}}/schedule">{% csrf_token %}
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+
+                                            <div class="form-outline">
+                                                <input type="text" id="name"
+                                                    class="form-control form-control-lg" name="name" required />
+                                                <label class="form-label" for="name">Name</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+
+                                            <div class="form-outline">
+                                                <input type="email" id="email"
+                                                    class="form-control form-control-lg" name="email" required/>
+                                                <label class="form-label" for="email">Email</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4 pb-2">
+
+                                            <div class="form-outline">
+                                                <input type="tel" id="phoneNumber"
+                                                    class="form-control form-control-lg" name="phone" required />
+                                                <label class="form-label" for="phoneNumber">Phone Number</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6 mb-4 pb-2">
+
+                                            <div class="form-outline datepicker w-100">
+                                                <input type="number" min="13" max="25"
+                                                    class="form-control form-control-lg" id="age" name="age" required />
+                                                <label for="age" class="form-label">Age</label>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+
+                                            <h6 class="mb-2 pb-1">Gender: </h6>
+
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="radiobtn"
+                                                    id="maleGender" value="Male" />
+                                                <label class="form-check-label" for="maleGender">Male</label>
+                                            </div>
+
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="radiobtn"
+                                                    id="femaleGender" value="Female" checked />
+                                                <label class="form-check-label" for="femaleGender">Female</label>
+                                            </div>
+
+
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="radiobtn"
+                                                    id="otherGender" value="option3" />
+                                                <label class="form-check-label" for="Other">Other</label>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-6 mb-4 d-flex align-items-center">
+
+
+                                            <div class="form-outline datepicker w-100">
+                                                <input type="number" min="1" value="1"
+                                                    class="form-control form-control-lg" id="visitor" name="visitor" required />
+                                                <label for="visitor" class="form-label">Visitor</label>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+
+
+                                            <div class="form-outline datepicker w-100">
+                                                <input type="date" class="form-control form-control-lg"
+                                                    id="date" name="date" required/>
+                                                <label for="date" class="form-label">Date</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-4 d-flex align-items-center">
+
+                                            <div class="form-outline datepicker w-100">
+                                                <input type="time" class="form-control form-control-lg"
+                                                    id="time" name="time" required/>
+                                                <label for="time" class="form-label">Time</label>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-danger btn-lg mt-4">Schedule Now</button>
+                                    </div>
+
+
+
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="text-center text-white">
+
+            <div class="text-center mt-3">
+        
+        
+        
+                © 2023 Copyright:
+                <a class="text-dark" href="https://FlyHigh.com/" style="color:red !important">FindYourPG.com</a>
+        
+                <!-- Instagram -->
+                <a class="btn btn-link btn-floating btn-lg text-dark" href="https://www.instagram.com/i_agarwal_ansh/"
+                    role="button" data-mdb-ripple-color="dark"><i class="fab fa-instagram"></i></a>
+        
+                <!-- Linkedin -->
+                <a class="btn btn-link btn-floating btn-lg text-dark" href="https://www.linkedin.com/in/ansh-agarwal-390797253/"
+                    role="button" data-mdb-ripple-color="dark" style="margin: -15px !important;"><i
+                        class="fab fa-linkedin"></i></a>
+                <!-- Github -->
+                <a class="btn btn-link btn-floating btn-lg text-dark" href="https://github.com/the-error4-0-4" role="button"
+                    data-mdb-ripple-color="dark"><i class="fab fa-github"></i></a>
+        
+            </div>
+            <!-- Copyright -->
+        </footer>
+        
+
+
+    </div>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
