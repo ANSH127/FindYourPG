@@ -61,7 +61,7 @@
                             <h2 class="card-title">{{item.main_address}}</h2>
                             <h5><span class="badge text-bg-info">Available {{item.room_vacent}}</span></h5>
 
-                            <p class="card-text" style="font-size: x-large;"><b> &#x20B9; 1600</b></p>
+                            <p class="card-text" style="font-size: x-large;"><b> &#x20B9; {{item.price}}</b></p>
                             <span>
                                 <a href="/{{item.City}}/{{item.sno}}/{{item.main_address}}/checkout" class="btn btn-primary">
                                     Book Now
@@ -135,8 +135,7 @@
                         </ul>
 
                     </div>
-                    
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5782.28693581973!2d75.76385200376289!3d31.216994368908047!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391af4bc2ced0259%3A0xca3b1a3b30af5ca!2sKhana%20Khazana%20-%20Ajit%20Foods!5e0!3m2!1sen!2sin!4v1675951709553!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    {{item.map|safe}}
                     <footer class="text-center text-white mb-3">
 
                         <div class="text-center text-dark mt-3">

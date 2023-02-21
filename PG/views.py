@@ -4,7 +4,8 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-from PG.models import Userdetail,Contact,multipleimage,RentarDetail,Booking,Schedule
+from PG.models import Userdetail,Contact,multipleimage,RentarDetail,Booking,Schedule,Proof,dueProof
+from datetime import date
 # Create your views here.
 
 def home(request):
@@ -50,7 +51,7 @@ def register(request):
             x.save()
         # print(name,phone,email,city,main_address,detail_address,vacency,room_details)
         
-        messages.success(request,"Your Registration Completed successfully")
+        messages.success(request,"Your Respone Submitted We will contact you soon!")
         return redirect('/')
     else:
         return render(request,'register.html')
@@ -71,9 +72,7 @@ def checkout(request,slug,myid,slug2):
     
     obj=RentarDetail.objects.filter(sno=myid)[0]
     
-    # print(obj)
-
-    return render(request,'booking.html',{'item':obj})
+    return render(request,'booking.html',{'item':obj,'date':str(date.today())})
 
 
 
@@ -187,20 +186,96 @@ def handlelogout(request):
 
 
 def handlepayment(request,slug,myid,slug2):
-    if request.method=="POST":
-        fname=request.POST.get('fname','')
-        lname=request.POST.get('lname','')
-        email=request.POST.get('email','')
-        phone=request.POST.get('phone','')
-        age=request.POST.get('age','')
-        gender=request.POST.get('radiobtn','')
-        residance=request.POST.get('choice','')
-        print(fname,lname,email,phone,age,gender,residance)
-        booking=Booking(name=fname+lname,email=email,phone=phone,age=age,gender=gender,residance=residance,info=RentarDetail.objects.filter(sno=myid)[0])
-        booking.save()
+    if request.user.is_authenticated:
+        if request.method=="POST":
+            fname=request.POST.get('fname','')
+            lname=request.POST.get('lname','')
+            email=request.POST.get('email','')
+            phone=request.POST.get('phone','')
+            age=request.POST.get('age','')
+            gender=request.POST.get('radiobtn','')
+            a_date=request.POST.get('date','')
+            month=request.POST.get('month','')
+            fare=request.POST.get('fare','')
+            token_fare=request.POST.get('token_fare','')
+            residance=request.POST.get('choice','')
+            print(fname,lname,email,phone,age,gender,residance,fare,token_fare)
+            if token_fare=='0':
+                amount=fare
+            else:
+                amount=token_fare
+            print(amount)
+            booking=Booking(name=fname+lname,email=email,phone=phone,age=age,gender=gender,a_date=a_date,month=month,tfare=fare,amount_paid=amount,remaining_due=int(fare)-int(amount),residance=residance,info=RentarDetail.objects.filter(sno=myid)[0])
+            booking.save()
+            bookingid=booking.sno
+            obj=RentarDetail.objects.filter(sno=myid)[0]
+        
 
-
-        return HttpResponse('payment gateway')
+            return render(request,'qrpage.html',{'price':amount,'id':bookingid})
+        else:
+            return redirect('/')
     else:
-        return redirect('/')
+        messages.warning(request,'Login Or SingUp to Checkout')
+        return redirect('login')
+    
+
+
+def check(request,myid):
+    print(myid)
+    if request.user.is_authenticated:
+        if request.method=='POST':
+            obj=Booking.objects.filter(sno=myid)[0]
+            print(obj)
+            proof=request.FILES.getlist('img')[0]
+            print(proof)
+            obj2=Proof(info=obj,img=proof,name=request.user)
+            obj2.save()
+            messages.success(request,'Your Response submitted to us Successfully')
+
+            return redirect('/')
+        else:
+            return HttpResponse('Error')
+    else:
+        return redirect('login')
+
+
+
+
+def booking(request):
+    if request.user.is_authenticated:
+
+        obj=Proof.objects.filter(name=request.user)
+        print(obj)
+        if len(obj)==0:
+            return render(request,'notfound.html')
+        return render(request,'your_booking.html',{'obj':obj})
+    else:
+        
+        messages.warning(request,'Login Or SingUp')
+        return redirect('login')
+
+
+
+def handleduepayment(request,myid):
+    if request.user.is_authenticated:
+        if request.method=='POST':
+            obj2=Proof.objects.filter(sno=myid)[0]
+            print(obj2)
+            proof=request.FILES.getlist('img')[0]
+            amt=request.POST.get('amt','')
+            print(proof,amt)
+            obj3=dueProof(parent=obj2,img=proof,name=request.user,amount=amt)
+            obj3.save()
+            messages.success(request,'Your Response submitted to us Successfully. We will update your amount as soon as possible!')
+            return redirect('/')
+        else:
+            obj=Proof.objects.filter(sno=myid)[0]
+            print(obj.info.remaining_due)
+            if obj.name==str(request.user) and obj.info.remaining_due!=0 :
+                return render(request,'qrpage2.html',{'price':obj.info.remaining_due,'id':myid})
+            else:
+                return HttpResponse('error')
+    else:
+        messages.warning(request,'Login Or SingUp to Checkout')
+        return redirect('login')
     

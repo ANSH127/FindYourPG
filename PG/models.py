@@ -38,6 +38,7 @@ class RentarDetail(models.Model):
     room_vacent=models.IntegerField()
     price=models.IntegerField(default=0)
     status=models.BooleanField(default=False)
+    map=models.CharField(max_length=2000,default='')
 
 class multipleimage(models.Model):
     sno=models.AutoField(primary_key=True)
@@ -52,8 +53,16 @@ class Booking(models.Model):
     phone=models.CharField(max_length=13)
     age=models.IntegerField()
     gender=models.CharField(max_length=10)
+    a_date=models.DateField(auto_now_add=False)
+    month=models.IntegerField(default=1)
     residance=models.CharField(max_length=100)
+    tfare=models.IntegerField(default=0)
+    amount_paid=models.IntegerField(default=0)
+    remaining_due=models.IntegerField(default=0)
     info=models.ForeignKey(RentarDetail,on_delete=models.CASCADE,default='')
+    b_date=models.DateField(auto_now_add=True)
+    b_time=models.TimeField(auto_now_add=True)
+
 
 
 class Schedule(models.Model):
@@ -69,3 +78,28 @@ class Schedule(models.Model):
     info=models.ForeignKey(RentarDetail,on_delete=models.CASCADE,default='')
 
     
+class Proof(models.Model):
+
+    sno=models.AutoField(primary_key=True)
+    name=models.CharField(max_length=50,default='')
+    info=models.ForeignKey(Booking,on_delete=models.CASCADE)
+    img=models.ImageField(upload_to='room/proof')
+    b_date=models.DateField(auto_now_add=True)
+    file=models.FileField(blank=True)
+    status=models.CharField(max_length=30)
+
+
+class dueProof(models.Model):
+    sno=models.AutoField(primary_key=True)
+    name=models.CharField(max_length=50)
+    parent=models.ForeignKey(Proof,on_delete=models.CASCADE)
+    img=models.ImageField(upload_to='room/dueproof')
+    payment_date=models.DateField(auto_now_add=True)
+    amount=models.IntegerField()
+    status=models.CharField(max_length=30)
+
+
+
+
+
+

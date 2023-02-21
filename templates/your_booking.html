@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Mybookings-FindYourPG{% endblock title %}
+{% block img %}60111.jpg{% endblock img %} 
+
+{% block css %}
+
+<style>
+    
+
+    body {
+        background-color: aliceblue;
+    }
+    @media only screen and (max-width: 1170px) {
+        
+    h5{
+        font-size: 10px;
+    }
+    
+  }
+</style>
+
+{% endblock css %}
+{% block body %}
+
+<div class="container mt-3">
+    {% for item in obj  %}
+    <div class="card my-2">
+        <div class="card-body" style="background-color: cadetblue; color: azure; font-weight: bold;">
+
+            <div class="row">
+                <div class="col-3 ">
+                    {% if  item.status == 'True'%}
+                    <h5><span class="badge text-bg-success">CONFIRMED</span></h5>
+                    {% elif item.status == 'False' %}
+                    <h5><span class="badge text-bg-danger">FAILED</span></h5>
+
+                    {% else %}
+                    <h5><span class="badge text-bg-warning">PENDING</span></h5>
+
+                    
+                    {% endif %}
+                    <p>Booked On: {{item.b_date}} </p>
+
+                </div>
+                
+                <div class="col-3">
+                    {{item.info.info.main_address}}
+                </div>
+                <div class="col">Booking refrence no
+                    <p>{{item.sno}}</p>
+                </div>
+                <div class="col-3 ">
+                   
+                    <p>Checkin On: {{item.info.a_date}} </p>
+                    <span>
+                    <h5><span class="badge text-bg-info">Remaning Due:{{item.info.remaining_due}} </span></h5>
+
+                </div>
+                <div class="col">
+                    {% if item.file%}
+
+                    <a href="/media/{{item.file}}/" target="_blank" class="btn btn-outline-info btn-sm my-1" type="submit">Download Resume</a>
+                    {% else %}
+                    <button class="btn btn-outline-info btn-sm my-1" type="submit">Download Ticket</button>
+                    {% endif %}
+
+                    {% if not item.info.remaining_due %}
+                    {% else %}
+
+                    <a href='/{{item.sno}}/handleduepayment' type='button' class='btn btn-outline-info btn-sm my-1 mx-3'>Pay Due</a>
+                    {% endif %}
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+
+{% endblock body %}

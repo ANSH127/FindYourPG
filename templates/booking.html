@@ -7,6 +7,8 @@
     <title>Checkout-FindYourPG</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
 </head>
 
 <style>
@@ -35,13 +37,14 @@
 
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">1 Room
+                <li class="list-group-item">1 Room (<span id="b_month">1</span> month)
                     <span class="mx-2" style="position: absolute; right: 0;"><b>&#8377; <span id="basefare">
                                 {{item.price}}</span></b></span>
                 </li>
 
                 <li class="list-group-item">Total Discount
-                    <span class="mx-2" style="position: absolute; right: 0;"><b>&#8377; 0</b></span>
+                    <span class="mx-2" style="position: absolute; right: 0;"><b>&#8377; <span
+                                id="tdiscount">0</span></b></span>
 
                 </li>
                 <li class="list-group-item">Taxes & Service Fees
@@ -66,14 +69,16 @@
                         <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                             <div class="card-body p-4 p-md-5">
                                 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Guest Details</h3>
-                                <form action="/{{item.City}}/{{item.sno}}/{{item.main_address}}/handlepayment" method="post">{% csrf_token %}
-
+                                <form action="/{{item.City}}/{{item.sno}}/{{item.main_address}}/handlepayment"
+                                    method="post" name="guest-form">{% csrf_token %}
+                                    <input type="hidden" name="fare" id="fare" value="{{item.price}}" readonly>
+                                    <input type="hidden" name="token_fare" id="token_fare" value="0">
                                     <div class="row">
                                         <div class="col-md-6 mb-4">
 
                                             <div class="form-outline">
-                                                <input type="text" id="firstName"
-                                                    class="form-control form-control-lg" required name="fname" />
+                                                <input type="text" id="firstName" class="form-control form-control-lg"
+                                                    required name="fname" />
                                                 <label class="form-label" for="firstName">First Name</label>
                                             </div>
 
@@ -81,7 +86,8 @@
                                         <div class="col-md-6 mb-4">
 
                                             <div class="form-outline">
-                                                <input type="text" id="lastName" name="lname" required class="form-control form-control-lg" />
+                                                <input type="text" id="lastName" name="lname" required
+                                                    class="form-control form-control-lg" />
                                                 <label class="form-label" for="lastName">Last Name</label>
                                             </div>
 
@@ -101,8 +107,8 @@
                                         <div class="col-md-6 mb-4 pb-2">
 
                                             <div class="form-outline">
-                                                <input type="tel" id="phoneNumber"
-                                                    class="form-control form-control-lg" name="phone" required />
+                                                <input type="tel" id="phoneNumber" class="form-control form-control-lg"
+                                                    name="phone" required />
                                                 <label class="form-label" for="phoneNumber">Phone Number</label>
                                             </div>
 
@@ -112,7 +118,7 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-4 d-flex align-items-center">
 
-                                            <div class="form-outline datepicker w-100">
+                                            <div class="form-outline  w-100">
                                                 <input type="number" min="13" max="25" required
                                                     class="form-control form-control-lg" name="age" id="birthdayDate" />
                                                 <label for="birthdayDate" class="form-label">Age</label>
@@ -144,6 +150,28 @@
 
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4 d-flex align-items-center">
+
+                                            <div class="form-outline datepicker w-100">
+                                                <input type="date" required class="form-control form-control-lg"
+                                                    name="date" id="date" min="{{date}}" />
+                                                <label for="date" class="form-label">Expected Arrival Date</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6 mb-4 d-flex align-items-center">
+
+                                            <div class="form-outline  w-100">
+                                                <input type="number" min="1" max="12" value="1" required
+                                                    class="form-control form-control-lg" name="month" id="month"
+                                                    onchange="func()" />
+                                                <label for="month" class="form-label">Month's</label>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
 
 
                                     <div class="row">
@@ -151,7 +179,7 @@
 
                                             <select class="select form-control-lg" name="choice" required>
                                                 <option value="College Student">College Student</option>
-                                                <option value="Other">Other</option> 
+                                                <option value="Other">Other</option>
                                             </select>
 
                                         </div>
@@ -159,8 +187,15 @@
                                     </div>
                                     <!-- <button class="btn btn-danger btn-lg mt-4">Pay Now</button> -->
 
+                                    {% if not request.user.is_authenticated %}
+
+                                    <h6 style="color: red;">Login Or Singup to proceed next</h6>
+                                    {% endif %}
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-danger btn-lg">Pay Now</button>
+                                        <button type="submit" onclick="func();" class="btn btn-danger btn-lg">Pay
+                                            Now</button>
+                                        <button type="submit" onclick="func(); func2();" class="btn btn-danger btn-lg">Pay
+                                            Token Amount</button>
                                     </div>
 
 
@@ -176,29 +211,29 @@
         <footer class="text-center text-white">
 
             <div class="text-center mt-3">
-        
-        
-        
+
+
+
                 © 2023 Copyright:
                 <a class="text-dark" href="https://FlyHigh.com/" style="color:red !important">FindYourPG.com</a>
-        
+
                 <!-- Instagram -->
                 <a class="btn btn-link btn-floating btn-lg text-dark" href="https://www.instagram.com/i_agarwal_ansh/"
                     role="button" data-mdb-ripple-color="dark"><i class="fab fa-instagram"></i></a>
-        
+
                 <!-- Linkedin -->
-                <a class="btn btn-link btn-floating btn-lg text-dark" href="https://www.linkedin.com/in/ansh-agarwal-390797253/"
-                    role="button" data-mdb-ripple-color="dark" style="margin: -15px !important;"><i
-                        class="fab fa-linkedin"></i></a>
+                <a class="btn btn-link btn-floating btn-lg text-dark"
+                    href="https://www.linkedin.com/in/ansh-agarwal-390797253/" role="button"
+                    data-mdb-ripple-color="dark" style="margin: -15px !important;"><i class="fab fa-linkedin"></i></a>
                 <!-- Github -->
-                <a class="btn btn-link btn-floating btn-lg text-dark" href="https://github.com/the-error4-0-4" role="button"
-                    data-mdb-ripple-color="dark"><i class="fab fa-github"></i></a>
-        
+                <a class="btn btn-link btn-floating btn-lg text-dark" href="https://github.com/the-error4-0-4"
+                    role="button" data-mdb-ripple-color="dark"><i class="fab fa-github"></i></a>
+
             </div>
             <!-- Copyright -->
         </footer>
-        
-        
+
+
 
     </div>
 
@@ -212,11 +247,47 @@
 </body>
 
 <script>
+
+
     let x = document.getElementById('basefare').innerHTML
-    console.log(x)
+
     x = parseInt(x)
     x = x + 100
     document.getElementById('totalfare').innerHTML = x
+    document.getElementById('fare').value = x
+    var basefare = document.getElementById('basefare').innerHTML
+    
+    function func2(){
+        document.getElementById('token_fare').value=500
+    }
+
+    function func() {
+
+
+        let month = document.getElementById('month').value
+        let tdiscount = 0
+        if (parseInt(month) >= 2 && parseInt(month) <= 5) {
+            tdiscount = 200
+
+
+        }
+
+        else if (parseInt(month) >= 6) {
+            tdiscount = 500
+        }
+        document.getElementById('basefare').innerHTML = parseInt(month) * parseInt(basefare)
+        document.getElementById('b_month').innerHTML = month
+        document.getElementById('tdiscount').innerHTML = tdiscount
+        document.getElementById('totalfare').innerHTML = (parseInt(month) * parseInt(basefare)) - tdiscount + 100
+        document.getElementById('fare').value = (parseInt(month) * parseInt(basefare)) - tdiscount + 100
+    }
+
+
+
+    window.addEventListener("pageshow", () => {
+        let frm = document.getElementsByName('guest-form')[0]
+        frm.reset()
+    });
 
 
 </script>

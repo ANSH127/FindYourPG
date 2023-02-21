@@ -1,0 +1,52 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DuePayment-GetResume</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+
+<style>
+    body {
+        background: url('/media/pexels-ivan-samkov-7621140.jpg') no-repeat center center/cover;
+        opacity: .9;
+    }
+    input{
+        border-radius: 10px;
+        font-weight: bold;
+        line-height: 2;
+        
+    }
+</style>
+
+<body>
+
+
+
+
+
+    <div class="text-center my-5">
+        <h2 class="my-4">Scan QR</h2>
+        <a href="upi://pay?pa=care.toskatoday-1@okhdfcbank&pn=TOSKA%20TODAY&am={{price}}.00&cu=INR&aid=uGICAgIDT9abVHQ"><img src="/media/qrcode.jpg" alt="" width="250px" height="250px"></a>
+        <!-- <h3 class="mt-4">&#8377; {{price}}</h3> -->
+        <form action="/{{id}}/handleduepayment" method="post" enctype='multipart/form-data'>{% csrf_token %}
+        <h6><input type="text" class="text-center mt-4" name="amt" value="{{price}}" placeholder="Enter Amount"></h6>
+        <div style="width: 50%; left: 25%; position: relative;">
+            <label class="form-label" for="img"><b>Upload Payment Proof</b></label>
+            <input multiple type="file" id="img" name="img" class="form-control form-control-lg" required />
+        </div>
+        <button class="btn btn-danger btn-lg mt-4" type="submit">Submit</button>
+    </form>
+
+
+
+
+    </div>
+
+
+</body>
+</html>
