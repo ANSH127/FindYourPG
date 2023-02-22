@@ -4,8 +4,10 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-from PG.models import Userdetail,Contact,multipleimage,RentarDetail,Booking,Schedule,Proof,dueProof
+from PG.models import Userdetail,Contact,multipleimage,RentarDetail,Booking,Schedule,Proof,dueProof,Profile
 from datetime import date
+from .mail import send_forget_password_mail
+import uuid
 # Create your views here.
 
 def home(request):
@@ -140,6 +142,8 @@ def handlesignup(request):
         myuser.save()
         userdetail=Userdetail(username=username,name=name,phone=phone,email=signup_email,password=password)
         userdetail.save()
+        profile_obj = Profile.objects.create(user = myuser)
+        profile_obj.save()
         
         
         user=authenticate(username=username, password=password)
@@ -168,7 +172,7 @@ def handlelogin(request):
             return redirect('/')
         else:
             messages.error(request,'Invalid Credentials, Please Try Again')
-            return redirect('/')
+            return redirect('login')
 
 
 
@@ -279,3 +283,59 @@ def handleduepayment(request,myid):
         messages.warning(request,'Login Or SingUp to Checkout')
         return redirect('login')
     
+
+
+def forget_password(request):
+    if request.method=='POST':
+        username = request.POST.get('username')
+        val=User.objects.filter(username=username) 
+        val2=User.objects.filter(email=username)
+        print(val,val2)
+        if not (len(val)>=1 or len(val2)>=1):
+                messages.success(request, 'Not user found with this username.')
+                return redirect('forget_password')
+        if len(val2)>=1:
+
+            user_obj = User.objects.get(email = username)
+        else:
+            user_obj = User.objects.get(username = username)
+        token = str(uuid.uuid4())
+        profile_obj= Profile.objects.get(user = user_obj)
+        profile_obj.forget_password_token = token
+        profile_obj.save()
+        send_forget_password_mail(user_obj.email,token)
+        messages.success(request, 'An email is sent.')
+        return redirect('forget_password')
+        
+        
+    return render(request,'forgetpass.html')
+
+
+def change_password(request,token):
+    profile_obj = Profile.objects.filter(forget_password_token = token).first()
+    print(profile_obj)
+    if profile_obj==None:
+        return render(request,'404.html')
+    context = {'user_id' : profile_obj.user.id}
+    if request.method == 'POST':
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+            user_id = request.POST.get('user_id')
+            print(new_password,confirm_password,user_id)
+            if user_id is  None:
+                messages.success(request, 'No user id found.')
+                return redirect(f'/change_password/{token}/')
+                
+            
+            if  new_password != confirm_password:
+                messages.success(request, "Password  doesn't match.")
+                return redirect(f'/change_password/{token}/')
+                         
+            
+            user_obj = User.objects.get(id = user_id)
+            user_obj.set_password(new_password)
+            user_obj.save()
+            return redirect('/login/')
+            
+    
+    return render(request,'changepass.html',context)
