@@ -42,11 +42,12 @@ def register(request):
         main_address=request.POST.get('m_address','')
         detail_address=request.POST.get('d_address','')
         vacency=request.POST.get('vacent','')
+        nearby_facilities=request.POST.get('nearby_facilities','')
         price=request.POST.get('price','')
         room_details=request.POST.get('r_details','')
         room_photos=request.FILES.getlist('r_img')
         
-        renter_form=RentarDetail(name=name,phone=phone,email=email,City=city,main_address=main_address,detailed_address=detail_address,room_details=room_details,room_vacent=vacency,price=price)
+        renter_form=RentarDetail(name=name,phone=phone,email=email,City=city,main_address=main_address,detailed_address=detail_address,room_details=room_details,room_vacent=vacency,price=price,nearby_facilities=nearby_facilities)
         renter_form.save()
         for image in room_photos:
             x=multipleimage(room_photos=image,room=RentarDetail.objects.filter(sno=renter_form.sno)[0])
@@ -67,8 +68,10 @@ def view(request,slug,myid,slug2):
     print(myid)
     obj=RentarDetail.objects.filter(sno=myid)
     detail=(obj[0].room_details)
+    detail2=(obj[0].nearby_facilities)
     list=(detail.split(','))
-    return render(request,'view.html',{'item':obj[0],'slug':slug2,'list':list})
+    list2=(detail2.split(','))
+    return render(request,'view.html',{'item':obj[0],'slug':slug2,'list':list,'list2':list2})
     
 def checkout(request,slug,myid,slug2):
     

@@ -131,7 +131,10 @@
                     <div class="mx-2 my-4">
                         <h5>Nearby Facilities</h5>
                         <ul>
-                            <li>MOTHER'S KITCHEN -70m</li>
+                            {% for item in list2 %}
+                            <li>{{item}}</li>
+                            {% endfor %}
+
                         </ul>
 
                     </div>

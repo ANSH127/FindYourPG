@@ -37,6 +37,7 @@ class RentarDetail(models.Model):
     detailed_address=models.CharField(max_length=500)
     room_details=models.TextField()
     room_vacent=models.IntegerField()
+    nearby_facilities=models.TextField(default='')
     price=models.IntegerField(default=0)
     status=models.BooleanField(default=False)
     map=models.CharField(max_length=2000,default='')

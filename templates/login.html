@@ -15,16 +15,17 @@
     }
 </style>
 {% endblock css %}
+{% load socialaccount %}
 
 {% block body %}
 <section class="vh-100 gradient-custom">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div class="card bg-dark text-white" style="border-radius: 1rem; height: 600px;">
+                <div class="card bg-dark text-white" style="border-radius: 1rem; height: 620px;">
                     <div class="card-body p-5 text-center">
-                        <form action="/login/" method="post">{% csrf_token %}
-                            <div class="mb-md-5 mt-md-4 pb-5">
+                        <div class="mb-md-5 mt-md-4 pb-5">
+                            <form action="/login/" method="post">{% csrf_token %}
 
                                 <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
                                 <p class="text-white-50 mb-5">Please enter your login and password!</p>
@@ -41,7 +42,8 @@
                                     <label class="form-label" for="password">Password</label>
                                 </div>
 
-                                <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="/forget_password">Forgot password?</a>
+                                <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="/forget_password">Forgot
+                                        password?</a>
                                 </p>
 
                                 <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
@@ -51,8 +53,15 @@
                                         Up</a>
                                 </p>
 
-                            </div>
-                        </form>
+                            </form>
+                            <form action="{% provider_login_url 'google'%}?next=/" method="post">{% csrf_token %}
+                                <button type="submit"
+                                    style="border: none; background-color: transparent; color: white; font-size: large;"><i type="submit"
+                                        class="fab fa-google fa-lg"></i></button>
+
+                            </form>
+                        </div>
+
 
 
                     </div>
